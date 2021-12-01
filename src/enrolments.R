@@ -1,5 +1,7 @@
 #enrolment,删除存在unknow的行
 library(dplyr)
+##delete all the row with NA
+enrolments=na.omit(enrolments)
 gender = enrolments1 %>% filter(gender != "Unknown")
 gender=table(gender$gender)
 gender=sort(gender,decreasing = T)[1:2]
