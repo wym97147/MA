@@ -32,7 +32,7 @@ library(fmsb)
 ggplot(gender,aes(x=Var1,y=Freq,fill=gender[,1],group=factor(1)))+geom_bar(stat="identity")
 ggplot(age_range,aes(x=Var1,y=Freq,fill=age_range[,1],group=factor(1)))+geom_point(stat="identity")
 ggplot(highest_education,aes(x=Var1,y=Freq,fill=highest_education[,1],group=factor(1)))+geom_bar(stat="identity")
-ggplot(detected_country1,aes(x=Var1,y=Freq,fill=country_1[,1],group=factor(1)))+geom_bar(stat="identity")
+ggplot(detected_country1,aes(x=Var1,y=Freq,fill=detected_country1[,1],group=factor(1)))+geom_bar(stat="identity")
 ggplot(employment_area,aes(x=Var1,y=Freq,fill=employment_area[,1],group=factor(1)))+geom_bar(stat="identity")
 #print radarchart of employment status
 radarfig<-rbind(rep(1300,8),rep(100,8),employment_status)

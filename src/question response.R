@@ -151,7 +151,7 @@ quiz_1.7.6_error_rerate#重复错误率0.40
 
 #对总错误率做图
 error_rate<-data.frame(
-  group=c("quiz_1.7.1_error_rerate","quiz_1.7.2_error_rerate","quiz_1.7.3_error_rerate","quiz_1.7.4_error_rerate","quiz_1.7.6_error_rerate"),
+  group=c("quiz_1.7.1_error_rate","quiz_1.7.2_error_rate","quiz_1.7.3_error_rate","quiz_1.7.4_error_rate","quiz_1.7.5_error_rate","quiz_1.7.6_error_rate"),
   value=c(0.368,0.291,0.387,0.062,0,0.56)
 )
 head(error_rate)
@@ -161,12 +161,11 @@ bp
 
 #对重复错误率做饼图
 error_rerate<-data.frame(
-  group=c("quiz_1.7.1_error_rate","quiz_1.7.2_error_rate","quiz_1.7.3_error_rate","quiz_1.7.4_error_rate","quiz_1.7.5_error_rate","quiz_1.7.6_error_rerate"),
+  group=c("quiz_1.7.1_error_rerate","quiz_1.7.2_error_rerate","quiz_1.7.3_error_rerate","quiz_1.7.4_error_rerate","quiz_1.7.5_error_rerate","quiz_1.7.6_error_rerate"),
   value=c(0.437,0.021,0.528,0.0047,0,0.4)
 )
 head(error_rerate)
 bp2<-ggplot(error_rerate,aes(x=group,y=value,fill=group))+geom_bar(width=1,stat="identity")
-bp2
 pie2<-bp2+coord_polar("y",start=0)
 pie2
 

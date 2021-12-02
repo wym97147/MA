@@ -10,7 +10,6 @@ question_response=rbind(cyber.security.1_question.response,
 question_response=question_response[,-8]
 #删除表中存在na的值
 question_response=na.omit(question_response)
-view(question_response)
 (question_response$correct[which(question_response$correct=="false")] <- 2)
 (question_response$correct[which(question_response$correct=="true")] <- 1)
 dim(question_response$correct)
@@ -23,11 +22,9 @@ question_response1=question_response[,-8]
 question_response1=data.frame(question_response1,correct)
 typeof(question_response1$dd)
 question_response2=question_response1[,-8]
-view(question_response2)
 #提取1.8.1回答的人数
 quiz_question_1.8.1=question_response2 %>% filter(quiz_question == "1.8.1")
 quiz_question_1.8.1=as.data.frame(quiz_question_1.8.1)
-view(quiz_question_1.8.1)
 set.seed(1234)
 sub=sample(1:nrow(quiz_question_1.8.1),round(nrow(quiz_question_1.8.1)*8/10))
 #8/10的数据做训练集
@@ -41,7 +38,7 @@ dim(quiz_train)
 head(as.integer(quiz_train$correct))
 quiz_train1=data.frame(quiz_train[,3:6],correct=as.integer(quiz_train$correct)-1)
 quiz_train1
-typeof(quiz_train1$response)
+typeof(quiz_train1$correct)
 t=as.numeric(gsub(",",'',quiz_train1$response))
 t
 t=as.data.frame(t)
@@ -74,10 +71,19 @@ corr.test(quiz_train1[,4:5])
 phat=predict(lr_fit,quiz_train1,type="response")
 yhat=ifelse(phat>0.5,1,0)
 (confusion=table(Observed=quiz_train1$correct,predict=yhat))
+#training error
 1-mean(quiz_train1$correct==yhat)
 
 lr_test=glm(correct~t1,data=quiz_test1)
 phat_test=predict(lr_test,quiz_test1,type="response")
 yhat_test=ifelse(phat_test>0.5,1,0)
+#testing error
 1-mean(quiz_test1$correct==yhat_test)
+
+#plot distribution of responses
+par(mfrow=c(1,1))
+hist(quiz_train1$t[quiz_train1$correct==1],col=rgb(0,0,1,1/4),breaks=25,freq=FALSE,xlim=c(0,130),ylim=c(0,0.2),main="",xlab="quiz_train")
+hist(quiz_train1$t[quiz_train1$correct==0],col=rgb(1,0,0,1/4),freq=FALSE,add=TRUE)
+legend("topright",legend =c("false","true"),bg="gray90",fill=c(rgb(0,0,1,1/4),rgb(1,0,0,1/4)))
+
 
