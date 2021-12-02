@@ -1,8 +1,12 @@
 #主成分分析
 library(MASS)
-video_stats2=video_stats1[,-(5:17)]
+video_stats2=video_stats1[,-(15:23)]
 video_stats2=video_stats2[,-2]
-view(video_stats2)
+video_stats2=video_stats2[c(14:26),]
+video_stats2
+#计算相关性
+R=cor(video_stats2[,2:9])
+R
 #to obtain the sample covariance matrix use the var function
 S=var(video_stats2[,2:9])
 S
@@ -16,7 +20,7 @@ par(mfrow=c(1,1))
 plot(pca1,type="lines",main="")
 title(xlab="Component number")
 #fit linear model
-x1_raw=video_stats2[,3:9]
+x1_raw=video_stats2[,3:6]
 x1_raw=as.matrix(x1_raw)
 y=video_stats2[,2]
 #standardise explanatory variables
