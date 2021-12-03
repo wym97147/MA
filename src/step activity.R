@@ -14,7 +14,7 @@ step_activity_1.1
 step_1.1=step_activity_1.1[,5:6]
 step_1.1
 h=as.data.frame(step_1.1)
-#计算时间差
+#Calculate the time difference
 h1=difftime(as.POSIXct(ymd_hms(h$last_completed_at)),ymd_hms(h$first_visited_at),units='secs')
 class(h1)
 h1=as.numeric(h1)
@@ -31,7 +31,7 @@ step_activity_1.14
 step_1.14=step_activity_1.14[,5:6]
 step_1.14
 s=as.data.frame(step_1.14)
-#计算时间差
+#Calculate the time difference
 s1=difftime(as.POSIXct(ymd_hms(s$last_completed_at)),ymd_hms(s$first_visited_at),units='secs')
 class(s1)
 s1=as.numeric(s1)

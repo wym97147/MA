@@ -1,4 +1,7 @@
 # Example preprocessing script.
+library(ProjectTemplate)
+setwd("/Users/wangyimiao/Desktop/MA")
+load.project()
 #merges the data of archetype-survey-responses
 archetype_survey_responses=rbind(cyber.security.1_archetype.survey.responses,
                                  cyber.security.2_archetype.survey.responses,
@@ -14,9 +17,6 @@ enrolments=rbind(cyber.security.1_enrolments,cyber.security.2_enrolments,
                  cyber.security.3_enrolments,cyber.security.4_enrolments,
                  cyber.security.5_enrolments,cyber.security.6_enrolments,
                  cyber.security.7_enrolments)
-
-##delete all the row with NA
-enrolments=na.omit(enrolments)
 
 #merges the data of leaving-survey-responses
 leaving_survey_responses=rbind(cyber.security.1_leaving.survey.responses,
@@ -52,7 +52,7 @@ team_member=rbind(cyber.security.2_team.members,cyber.security.3_team.members,
 video_stats=rbind(cyber.security.3_video.stats,cyber.security.4_video.stats,
                   cyber.security.5_video.stats,cyber.security.6_video.stats,
                   cyber.security.7_video.stats)
-
+view(video_stats)
 #merges the data of weekly-sentiment
 weekly_sentiment=rbind(cyber.security.1_weekly.sentiment.survey.responses,
                  cyber.security.2_weekly.sentiment.survey.responses,
@@ -66,6 +66,8 @@ weekly_sentiment=rbind(cyber.security.1_weekly.sentiment.survey.responses,
 index=duplicated(archetype_survey_responses$learner_id)
 archetype_survey_responses1=archetype_survey_responses[!index,]
 
+##delete all the row with NA
+enrolments=na.omit(enrolments)
 #enrolments data deduplication
 index=duplicated(enrolments$learner_id)
 enrolments1=enrolments[!index,]

@@ -1,4 +1,4 @@
-#enrolment,删除存在unknow的行
+#nrolment, delete unknow rows
 library(dplyr)
 gender = enrolments1 %>% filter(gender != "Unknown")
 gender=table(gender$gender)
@@ -25,10 +25,10 @@ table_detected = table(detected_country$detected_country)
 detected_country1=sort(table_detected,decreasing=T)[1:10]
 class(detected_country1)
 detected_country1=as.data.frame(detected_country1)
-##作图
+##plot
 library(ggplot2)
 library(fmsb)
-#可视化country_1
+#Visualize gender,agerange,education,detected country,employment
 ggplot(gender,aes(x=Var1,y=Freq,fill=gender[,1],group=factor(1)))+geom_bar(stat="identity")
 ggplot(age_range,aes(x=Var1,y=Freq,fill=age_range[,1],group=factor(1)))+geom_point(stat="identity")
 ggplot(highest_education,aes(x=Var1,y=Freq,fill=highest_education[,1],group=factor(1)))+geom_bar(stat="identity")

@@ -1,0 +1,594 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={CSC8631 Report},
+  pdfauthor={Yimiao Wang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{CSC8631 Report}
+\author{Yimiao Wang}
+\date{11/25/2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{data-merge-and-cleaning}{%
+\subsection{Data Merge and Cleaning}\label{data-merge-and-cleaning}}
+
+Use the rbind() function to merge the data sets into a table according
+to different names, and use the duplicated function to delete the
+duplicate values in the data, and use the na.omit() function to delete
+rows with NA values in the data. For archetype Survey responses and
+enrolment data delete rows with duplicate values of learner id.
+
+\hypertarget{exploratory-data-analysis}{%
+\subsection{Exploratory data analysis}\label{exploratory-data-analysis}}
+
+\hypertarget{enrolments}{%
+\subsubsection{Enrolments}\label{enrolments}}
+
+First use the 7 tables of enrolments for data visualization
+analysis,load the dplyr package,delete the rows with unknown and ``-''
+in the data set,and extract the
+gender,age\_range,country,highest\_education,employment\_status,and
+employee\_area in the table,respectively use data visualization
+processing and analyze the size of variables between different students.
+
+\begin{verbatim}
+## 
+## 载入程辑包：'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+From the gender variable, it can be seen that in all enrolments data,
+there are more males than females. Draw the composition of different age
+groups. It can be seen from the figure that most students are between 26
+to 35 years old, and With the increase of age, the number of students
+decreases to a certain extent. It is worth noting that the number of
+people younger than 18 years old is at least lower than that of middle
+school. Therefore, it can be clearly seen from the educational
+distribution chart that the highest degree of most students is a
+bachelor degree, and the second most number is a master degree. Among
+all scholars, the lowest degree is lower than that of middle school, and
+the number of college degree is the least.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(fmsb)}
+\CommentTok{\#Visualize gender,agerange,education,detected country,employment}
+\FunctionTok{ggplot}\NormalTok{(gender,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Var1,}\AttributeTok{y=}\NormalTok{Freq,}\AttributeTok{fill=}\NormalTok{gender[,}\DecValTok{1}\NormalTok{],}\AttributeTok{group=}\FunctionTok{factor}\NormalTok{(}\DecValTok{1}\NormalTok{)))}\SpecialCharTok{+}\FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=}\StringTok{"identity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(age\_range,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Var1,}\AttributeTok{y=}\NormalTok{Freq,}\AttributeTok{fill=}\NormalTok{age\_range[,}\DecValTok{1}\NormalTok{],}\AttributeTok{group=}\FunctionTok{factor}\NormalTok{(}\DecValTok{1}\NormalTok{)))}\SpecialCharTok{+}\FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{stat=}\StringTok{"identity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-3-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(highest\_education,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{Var1,}\AttributeTok{y=}\NormalTok{Freq,}\AttributeTok{fill=}\NormalTok{highest\_education[,}\DecValTok{1}\NormalTok{],}\AttributeTok{group=}\FunctionTok{factor}\NormalTok{(}\DecValTok{1}\NormalTok{)))}\SpecialCharTok{+}\FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=}\StringTok{"identity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-3-3.pdf}
+
+Since the scholars come from different countries and regions, a
+histogram is made to check the distribution of the countries. From the
+figure, it can be seen that most of the scholars are from the United
+Kingdom, and the number of other countries is significantly smaller. The
+number of people from the three countries of MX, PK, and ES is the
+least.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-4-2.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-4-3.pdf}
+
+There are many professional workers among all learners, so visualize the
+employment area and analyze the work fields of different learners. From
+the histogram, it can be seen that the number of people engaged in it
+and information services accounts for most of the proportion, while
+those engaged in teaching and education the number is second, and the
+occupation with the least number is recruitment and pr.analyze the
+employment status of different scholars, load the fmsb program package,
+and make a radar chart. From the radar chart, it can be intuitively seen
+that the largest employment status is full-time employment, of which the
+second number is retired retirees,the number of unemployed is the least.
+
+\hypertarget{step-activity}{%
+\subsubsection{Step activity}\label{step-activity}}
+
+In order to be able to know the time required for students to do a
+question, use the data in the step activity to calculate the time
+difference,first delete the data with null values in the
+last\_completed\_at data set, take question 1.1 as the main analysis
+object,first filter out all answers to the 1.1 question People, extract
+the 5th and 6th columns, namely the time of the first visit and the
+completion time of the student, use the difftime() function to calculate
+the time difference, where as.POSIXct is used to specify the format of
+the year, month, day, time and time zone, and the apply() function is
+used to find the largest time difference With the minimum time
+difference, the maximum value is 56516879 seconds in line 58, which
+takes 15 hours to complete, and the minimum value is 1 second. Most of
+the time difference is between {[}500,1000{]}, indicating that the
+problem of 1.1 there are some more difficult questions.Then extract a
+question in 1.1, take 1.14 as an example, and also calculate the time
+difference. The maximum value is 41476865 seconds, and the minimum value
+is also 1 second.
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+& interval & max & min \\
+\midrule
+\endhead
+1.1 & {[}1000,4000{]} & 15h & 1s \\
+1.14 & {[}500,1000{]} & 14h & 1s \\
+:---: & :---: & :---: & :---: \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{question-response}{%
+\subsubsection{Question response}\label{question-response}}
+
+In order to get a clearer understanding of students
+answering,integrating the 7 tables of question response, delete all
+empty values in the 8th column, and delete rows with NA in the table to
+extract the number of people who answered 1.7.1-1.7.6. Since there will
+be duplicate students doing 1.7.1 and the answer is TRUE in the data
+set, the duplicate value is deleted, and the number of people who
+answered the question correctly is 3143. Similarly, count the number of
+people whose answer is wrong, and calculate Calculate the total number
+of people who answered the question and calculate the total error rate.
+Among the number of people who answered incorrectly, there are some
+people who repeatedly answered incorrectly. Use the total number of
+wrong answers minus the number of wrong answers to get the number of
+repeated mistakes, and repeat the wrong answers. Divide the number of
+people by the total number of incorrect answers to get the repeat error
+rate. Questions with a high repeat error rate indicate that they are
+more difficult and need to be explained.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-5-2.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-5-3.pdf}
+Therefore, in order to see the total error rate, repeated error rate of
+each question more intuitively, draw a table, a pie chart, and a
+histogram. It can be seen that 1.7.5 and 1.7.2 have the lowest repeat
+error rate, and the number of correct answers is also High, and 1.7.3 is
+the question with the highest repeat error rate, indicating that it is
+necessary to focus on the question.
+
+\hypertarget{video-stats}{%
+\subsubsection{Video stats}\label{video-stats}}
+
+In order to be able to visually see the positive status of students
+learning, the video status data set is merged. First, the data is
+sorted, and all columns with 0 are deleted to obtain a data set with 65
+rows and 23 columns. Use ggplot to make a density map from the video. It
+can be seen from the density graph of the total playback volume that the
+video playback volume of each section has the highest density at 500,
+indicating that the average number of views is about 500. From the
+density graph of the number of video downloads, it can be seen that the
+number of video downloads in each section is About 50 times.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+In order to further study the relationship between variables, take rows
+1 to 13 that is the data in the first table, load the reshape2 program
+package to refit the data set, take 1 to 4 columns, and make a scatter
+plot, from the scatter plot It can be seen that there is a linear
+relationship between the total number of videos played and the number of
+downloads. From the scattered point distribution, it can be seen that
+the most viewed and downloaded chapters of the video are 1.1, followed
+by 1.5, and the third chapter is generally very small, indicating that
+students enthusiasm for learning will be reduced later.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+Making an area chart for whether learner can understand the video
+content without adding subtitles. It can be seen from the figure that
+section 1.1 and section 1.5 have the most views, indicating that these
+two video contents are very Easy to understand. As for the requirements
+for high-definition video, it can be seen in the area chart that section
+2.11 uses high-definition viewing the most, indicating that the 2.11
+video definition needs to be improved.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-8-2.pdf}
+
+People who watch the video are in Europe, with a median of about 65.5\%,
+indicating that the average view of people in Europe is 65.5\%. The
+proportion of viewing in Asia and Oceania has decreased significantly,
+with the medians being 9.75\% and 3.25\% respectively.
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-9-1.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-9-2.pdf}
+\includegraphics{Report_files/figure-latex/unnamed-chunk-9-3.pdf}
+
+\hypertarget{model-establishment}{%
+\subsection{Model establishment}\label{model-establishment}}
+
+\hypertarget{video-stats-least-squares-regression-model}{%
+\subsubsection{video stats least squares regression
+model}\label{video-stats-least-squares-regression-model}}
+
+To model the video stats, first do the principal component analysis on
+the data, delete the data in the second column and columns 15 to 23,
+select the data in rows 14 to 26 for principal component analysis, first
+calculate the correlation between the variables, It can be seen that
+there is a strong correlation between the first three variables. Use the
+var function to obtain the sample covariance matrix and extract the
+diagonal elements. The total coefficient of variation is calculated to
+be 181379.7.
+
+\begin{verbatim}
+## 
+## 载入程辑包：'MASS'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+\end{verbatim}
+
+\begin{verbatim}
+##                           total_views total_downloads total_caption_views
+## total_views                1.00000000      0.98642400          0.90324840
+## total_downloads            0.98642400      1.00000000          0.86109753
+## total_caption_views        0.90324840      0.86109753          1.00000000
+## total_transcript_views     0.94292177      0.94308561          0.77333149
+## viewed_hd                 -0.02184285     -0.01030225          0.08034915
+## viewed_five_percent        0.72336421      0.68836373          0.59368574
+## viewed_ten_percent         0.67096273      0.61282545          0.59109243
+## viewed_twentyfive_percent  0.28672817      0.19681943          0.38300383
+##                           total_transcript_views   viewed_hd
+## total_views                           0.94292177 -0.02184285
+## total_downloads                       0.94308561 -0.01030225
+## total_caption_views                   0.77333149  0.08034915
+## total_transcript_views                1.00000000 -0.02963948
+## viewed_hd                            -0.02963948  1.00000000
+## viewed_five_percent                   0.58473554 -0.34077028
+## viewed_ten_percent                    0.52648630 -0.50038967
+## viewed_twentyfive_percent             0.08773656 -0.59430671
+##                           viewed_five_percent viewed_ten_percent
+## total_views                         0.7233642          0.6709627
+## total_downloads                     0.6883637          0.6128255
+## total_caption_views                 0.5936857          0.5910924
+## total_transcript_views              0.5847355          0.5264863
+## viewed_hd                          -0.3407703         -0.5003897
+## viewed_five_percent                 1.0000000          0.9316016
+## viewed_ten_percent                  0.9316016          1.0000000
+## viewed_twentyfive_percent           0.6648653          0.8424012
+##                           viewed_twentyfive_percent
+## total_views                              0.28672817
+## total_downloads                          0.19681943
+## total_caption_views                      0.38300383
+## total_transcript_views                   0.08773656
+## viewed_hd                               -0.59430671
+## viewed_five_percent                      0.66486535
+## viewed_ten_percent                       0.84240118
+## viewed_twentyfive_percent                1.00000000
+\end{verbatim}
+
+\begin{verbatim}
+##               total_views           total_downloads       total_caption_views 
+##              1.605838e+05              1.829077e+03              8.907692e+01 
+##    total_transcript_views                 viewed_hd       viewed_five_percent 
+##              2.776692e+03              1.607273e+04              7.525924e+00 
+##        viewed_ten_percent viewed_twentyfive_percent 
+##              9.238994e+00              1.150693e+01
+\end{verbatim}
+
+Use the prcomp() function to find the principal components and view the
+summary. The standard deviation of each principal component exceeds 100,
+and the cumulative variance contribution rate reaches 90\%. It can be
+seen from the gravel graph that the variance of the first two principal
+components accounts for most of the total variance, so the first two
+principal components are selected. The ingredients are appropriate.
+
+\begin{verbatim}
+## Importance of components:
+##                             PC1       PC2      PC3     PC4     PC5     PC6
+## Standard deviation     406.1134 126.77751 17.79552 6.98204 3.21674 1.59953
+## Proportion of Variance   0.9093   0.08861  0.00175 0.00027 0.00006 0.00001
+## Cumulative Proportion    0.9093   0.99791  0.99966 0.99993 0.99998 1.00000
+##                           PC7    PC8
+## Standard deviation     0.7727 0.2566
+## Proportion of Variance 0.0000 0.0000
+## Cumulative Proportion  1.0000 1.0000
+\end{verbatim}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+The next step is to fit the least squares regression model. When doing
+correlation analysis, it is found that there is no correlation between
+the following variables and the total amount of video playback.
+Therefore, columns 3 to 6 of the data set are selected as independent
+variable, total viewed as the dependent variable, check the model
+summary and found that the first two variables are significant, that is,
+the total number of videos played has a significant relationship with
+the number of downloads and the number of views, draw the residual
+diagram, and the distribution of the residual diagram on the left It is
+rather scattered, and most of them are randomly distributed around 0.
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = y ~ ., data = video_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -63.853 -24.106   1.286  14.605  80.508 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)              792.85      14.14  56.064 1.14e-11 ***
+## total_downloads          235.61      56.82   4.147  0.00322 ** 
+## total_caption_views       99.36      30.16   3.294  0.01095 *  
+## total_transcript_views    78.46      45.48   1.725  0.12279    
+## viewed_hd                -11.98      14.96  -0.801  0.44610    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 50.99 on 8 degrees of freedom
+## Multiple R-squared:  0.9892, Adjusted R-squared:  0.9838 
+## F-statistic: 183.3 on 4 and 8 DF,  p-value: 6.728e-08
+\end{verbatim}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Therefore, it can be considered that the total views volume of the video
+has a linear relationship with the number of downloads and the viewing
+time. The right panel is a quantile graph to evaluate the residuals. The
+normality of, most of the points are close to the unit diagonal,
+indicating that the residual of the linear regression model is normal.
+
+\hypertarget{question-response-logistic-model}{%
+\subsubsection{Question response logistic
+model}\label{question-response-logistic-model}}
+
+Perform model fitting on the question response data set. Since the data
+set type of the correct column is character, it needs to be converted to
+an integer type, and replace false with the number 2 and true with the
+number 1. Delete the data in the eighth column to Take the number of
+people who answered question 1.8.1 as an example, set a random seed,
+divide the data set into training set and test set according to 8:2, and
+delete the comma in the response column, use 1 for false, 0 for true,
+and correct as the response Variables and response columns are used as
+predictors to test the correlation between variables, fit a logistic
+model, and make predictions. The final test error is 0, indicating that
+the model has a better predictive effect.It can be seen from the figure
+that when the student's answer is 123, it can be counted as correct, and
+all other answers are counted as wrong.
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##    0    1 
+## 1104  824
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## glm(formula = correct ~ t, data = quiz_train1)
+## 
+## Deviance Residuals: 
+##       Min         1Q     Median         3Q        Max  
+## -0.065453  -0.003284  -0.003284  -0.003284   0.126086  
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  1.074e+00  8.211e-04  1308.2   <2e-16 ***
+## t           -8.706e-03  8.764e-06  -993.4   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.001892997)
+## 
+##     Null deviance: 1882.836  on 7710  degrees of freedom
+## Residual deviance:   14.593  on 7709  degrees of freedom
+## AIC: -26458
+## 
+## Number of Fisher Scoring iterations: 2
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## 载入程辑包：'psych'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:ggplot2':
+## 
+##     %+%, alpha
+\end{verbatim}
+
+\begin{verbatim}
+## 载入需要的程辑包：carData
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## 载入程辑包：'car'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:psych':
+## 
+##     logit
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     recode
+\end{verbatim}
+
+\begin{verbatim}
+## Call:corr.test(x = quiz_train1[, 4:5])
+## Correlation matrix 
+##         correct  t
+## correct       1 -1
+## t            -1  1
+## Sample Size 
+## [1] 7711
+## Probability values (Entries above the diagonal are adjusted for multiple tests.) 
+##         correct t
+## correct       0 0
+## t             0 0
+## 
+##  To see confidence intervals of the correlations, print with the short=FALSE option
+\end{verbatim}
+
+\begin{verbatim}
+##         predict
+## Observed    0    1
+##        0 4444    0
+##        1    0 3267
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\includegraphics{Report_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\end{document}

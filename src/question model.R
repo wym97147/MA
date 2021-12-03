@@ -6,9 +6,9 @@ question_response=rbind(cyber.security.1_question.response,
                         cyber.security.5_question.response,
                         cyber.security.6_question.response,
                         cyber.security.7_question.response)
-#删除第8列，因为全都为空值
+#Delete the 8th column because it is all empty
 question_response=question_response[,-8]
-#删除表中存在na的值
+#Delete the value of na in the table
 question_response=na.omit(question_response)
 (question_response$correct[which(question_response$correct=="false")] <- 2)
 (question_response$correct[which(question_response$correct=="true")] <- 1)
@@ -22,12 +22,12 @@ question_response1=question_response[,-8]
 question_response1=data.frame(question_response1,correct)
 typeof(question_response1$dd)
 question_response2=question_response1[,-8]
-#提取1.8.1回答的人数
+#Extract the number of people who answered 1.8.1
 quiz_question_1.8.1=question_response2 %>% filter(quiz_question == "1.8.1")
 quiz_question_1.8.1=as.data.frame(quiz_question_1.8.1)
 set.seed(1234)
 sub=sample(1:nrow(quiz_question_1.8.1),round(nrow(quiz_question_1.8.1)*8/10))
-#8/10的数据做训练集
+#8/10 of the data as the training set
 data_train=quiz_question_1.8.1[sub,]
 data_train_x=as.data.frame(data_train[,2:7])
 data_train_y=data_train[,8]
@@ -45,7 +45,7 @@ t=as.data.frame(t)
 quiz_train1=quiz_train1[,-4]
 quiz_train1=data.frame(quiz_train1,t)
 quiz_train1
-#2/10的数据做测试集
+#2/10 of the data as the test set
 data_test=quiz_question_1.8.1[-sub,]
 data_test_x=as.data.frame(data_test[,2:7])
 data_test_y=data_test[,8]
@@ -63,17 +63,17 @@ table(quiz_test1$correct)
 #fit logistic model
 lr_fit=glm(correct~t,data=quiz_train1)
 summary(lr_fit)
-#检验变量间的相关性
+#Test the correlation between variables
 library(psych)
 library(car)
 corr.test(quiz_train1[,4:5])
-#做预测
+#Make predictions
 phat=predict(lr_fit,quiz_train1,type="response")
 yhat=ifelse(phat>0.5,1,0)
 (confusion=table(Observed=quiz_train1$correct,predict=yhat))
 #training error
 1-mean(quiz_train1$correct==yhat)
-
+#use test data
 lr_test=glm(correct~t1,data=quiz_test1)
 phat_test=predict(lr_test,quiz_test1,type="response")
 yhat_test=ifelse(phat_test>0.5,1,0)

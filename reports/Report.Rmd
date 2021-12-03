@@ -2,7 +2,10 @@
 title: "CSC8631 Report"
 author: "Yimiao Wang"
 date: "11/25/2021"
-output: pdf_document
+output:
+  pdf_document: default
+  word_document: default
+student ID: '200971476'
 ---
 
 ```{r setup, include=FALSE}
@@ -12,26 +15,331 @@ knitr::opts_knit$set(root.dir= normalizePath('..'))
 
 
 ```{r ProjectTemplate, include=FALSE}
+library(ProjectTemplate)
+load.project()
+```
+
+
+## Data Merge and Cleaning
+
+Use the rbind() function to merge the data sets into a table according to different names, and use the duplicated function to delete the duplicate values in the data, and use the na.omit() function to delete rows with NA values in the data. For archetype Survey responses and enrolment data delete rows with duplicate values of learner id.
+
+```{r,echo=FALSE}
+#merges the data of enrolments
+enrolments=rbind(cyber.security.1_enrolments,cyber.security.2_enrolments,
+                 cyber.security.3_enrolments,cyber.security.4_enrolments,
+                 cyber.security.5_enrolments,cyber.security.6_enrolments,
+                 cyber.security.7_enrolments)
+
+#merges the data of question-response
+question_response=rbind(cyber.security.1_question.response,
+                        cyber.security.2_question.response,
+                        cyber.security.3_question.response,
+                        cyber.security.4_question.response,
+                        cyber.security.5_question.response,
+                        cyber.security.6_question.response,
+                        cyber.security.7_question.response)
+
+#merges the data of step_activity
+step_activity=rbind(cyber.security.1_step.activity,cyber.security.2_step.activity,
+                    cyber.security.3_step.activity,cyber.security.4_step.activity,
+                    cyber.security.5_step.activity,cyber.security.6_step.activity,
+                    cyber.security.7_step.activity)
+
+#merges the data of video-stats
+video_stats=rbind(cyber.security.3_video.stats,cyber.security.4_video.stats,
+                  cyber.security.5_video.stats,cyber.security.6_video.stats,
+                  cyber.security.7_video.stats)
+
+##delete all the row with NA
+enrolments=na.omit(enrolments)
+#enrolments data deduplication
+index=duplicated(enrolments$learner_id)
+enrolments1=enrolments[!index,]
 
 ```
 
 
-## R Markdown
+## Exploratory data analysis
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### Enrolments
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+First use the 7 tables of enrolments for data visualization analysis,load the dplyr package,delete the rows with unknown and "-" in the data set,and extract the gender,age_range,country,highest_education,employment_status,and employee_area in the table,respectively use data visualization processing and analyze the size of variables between different students.
 
-```{r cars, include=FALSE}
-summary(cars)
+```{r,echo=FALSE,include=FALSE}
+#delete unknow rows
+library(dplyr)
+gender = enrolments1 %>% filter(gender != "Unknown")
+gender=table(gender$gender)
+gender=sort(gender,decreasing = T)[1:2]
+gender=as.data.frame(gender)
+age_range = enrolments1 %>% filter(age_range != "Unknown")
+age_range=table(age_range$age_range)
+age_range=sort(age_range,decreasing = T)[1:7]
+age_range=as.data.frame(age_range)
+highest_education = enrolments1 %>% filter(highest_education_level != "Unknown")
+highest_education=table(highest_education$highest_education_level)
+highest_education=sort(highest_education,decreasing = T)
+highest_education=as.data.frame(highest_education)
+employment_status = enrolments1 %>% filter(employment_status != "Unknown")
+employment_status=table(employment_status$employment_status)
+employment_status=sort(employment_status,decreasing = T)
+employment_area = enrolments1 %>% filter(employment_area != "Unknown")
+employment_area=table(employment_area$employment_area)
+employment_area=sort(employment_area,decreasing = T)
+employment_area=as.data.frame(employment_area)
+detected_country = enrolments1 %>% filter(detected_country != "--")
+table_detected = table(detected_country$detected_country)
+detected_country1=sort(table_detected,decreasing=T)[1:10]
+detected_country1=as.data.frame(detected_country1)
 ```
 
-## Including Plots
+From the gender variable, it can be seen that in all enrolments data, there are more males than females. Draw the composition of different age groups. It can be seen from the figure that most students are between 26 to 35 years old, and With the increase of age, the number of students decreases to a certain extent. It is worth noting that the number of people younger than 18 years old is at least lower than that of middle school. Therefore, it can be clearly seen from the educational distribution chart that the highest degree of most students is a bachelor degree, and the second most number is a master degree. Among all scholars, the lowest degree is lower than that of middle school, and the number of college degree is the least.
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+library(ggplot2)
+library(fmsb)
+#Visualize gender,agerange,education,detected country,employment
+ggplot(gender,aes(x=Var1,y=Freq,fill=gender[,1],group=factor(1)))+geom_bar(stat="identity")
+ggplot(age_range,aes(x=Var1,y=Freq,fill=age_range[,1],group=factor(1)))+geom_point(stat="identity")
+ggplot(highest_education,aes(x=Var1,y=Freq,fill=highest_education[,1],group=factor(1)))+geom_bar(stat="identity")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Since the scholars come from different countries and regions, a histogram is made to check the distribution of the countries. From the figure, it can be seen that most of the scholars are from the United Kingdom, and the number of other countries is significantly smaller. The number of people from the three countries of MX, PK, and ES is the least.
+
+```{r,echo=FALSE}
+library(ggplot2)
+library(fmsb)
+ggplot(detected_country1,aes(x=Var1,y=Freq,fill=detected_country1[,1],group=factor(1)))+geom_bar(stat="identity")
+ggplot(employment_area,aes(x=Var1,y=Freq,fill=employment_area[,1],group=factor(1)))+geom_bar(stat="identity")
+#print radarchart of employment status
+radarfig<-rbind(rep(1300,8),rep(100,8),employment_status)
+radarfig=as.data.frame(radarfig)
+radarchart(radarfig,axistype=1,
+           pcol=rgb(69/225,137/225,137/225),pfcol=rgb(69/225,137/225,137/225,0.6),
+           plwd=4,seg=5,
+           cglcol="grey",cglty=1,cglwd=2,axislabcol="black",caxislabels=seq(0,15,3),vlcex=0.7,calcex=0.7)
+```
+
+There are many professional workers among all learners, so visualize the employment area and analyze the work fields of different learners. From the histogram, it can be seen that the number of people engaged in it and information services accounts for most of the proportion, while those engaged in teaching and education the number is second, and the occupation with the least number is recruitment and pr.analyze the employment status of different scholars, load the fmsb program package, and make a radar chart. From the radar chart, it can be intuitively seen that the largest employment status is full-time employment, of which the second number is retired retirees,the number of unemployed is the least.
+
+
+### Step activity
+
+In order to be able to know the time required for students to do a question, use the data in the step activity to calculate the time difference,first delete the data with null values in the last_completed_at data set, take question 1.1 as the main analysis object,first filter out all answers to the 1.1 question People, extract the 5th and 6th columns, namely the time of the first visit and the completion time of the student, use the difftime() function to calculate the time difference, where as.POSIXct is used to specify the format of the year, month, day, time and time zone, and the apply() function is used to find the largest time difference With the minimum time difference, the maximum value is 56516879 seconds in line 58, which takes 15 hours to complete, and the minimum value is 1 second. Most of the time difference is between [500,1000], indicating that the problem of 1.1 there are some more difficult questions.Then extract a question in 1.1, take 1.14 as an example, and also calculate the time difference. The maximum value is 41476865 seconds, and the minimum value is also 1 second.
+
+|  |interval|max|min|
+|:---:|:---:|:---:|:---:|
+|1.1|[1000,4000]|15h|1s|
+|1.14|[500,1000]|14h|1s|
+|:---:|:---:|:---:|:---:|
+
+
+### Question response
+
+In order to get a clearer understanding of students answering,integrating the 7 tables of question response, delete all empty values in the 8th column, and delete rows with NA in the table to extract the number of people who answered 1.7.1-1.7.6. Since there will be duplicate students doing 1.7.1 and the answer is TRUE in the data set, the duplicate value is deleted, and the number of people who answered the question correctly is 3143. Similarly, count the number of people whose answer is wrong, and calculate Calculate the total number of people who answered the question and calculate the total error rate. Among the number of people who answered incorrectly, there are some people who repeatedly answered incorrectly. Use the total number of wrong answers minus the number of wrong answers to get the number of repeated mistakes, and repeat the wrong answers. Divide the number of people by the total number of incorrect answers to get the repeat error rate. Questions with a high repeat error rate indicate that they are more difficult and need to be explained. 
+
+
+```{r,echo=FALSE}
+#plot total error rate
+error_rate<-data.frame(
+  group=c("quiz_1.7.1_error_rate","quiz_1.7.2_error_rate","quiz_1.7.3_error_rate","quiz_1.7.4_error_rate","quiz_1.7.5_error_rate","quiz_1.7.6_error_rate"),
+  value=c(0.368,0.291,0.387,0.062,0,0.56)
+)
+bp<-ggplot(error_rate,aes(x=group,y=value,fill=group))+geom_bar(width=1,stat="identity")
+bp
+#plot repeat error rate
+error_rerate<-data.frame(
+  group=c("quiz_1.7.1_error_rerate","quiz_1.7.2_error_rerate","quiz_1.7.3_error_rerate","quiz_1.7.4_error_rerate","quiz_1.7.5_error_rerate","quiz_1.7.6_error_rerate"),
+  value=c(0.437,0.021,0.528,0.0047,0,0.4)
+)
+bp2<-ggplot(error_rerate,aes(x=group,y=value,fill=group))+geom_bar(width=1,stat="identity")
+pie2<-bp2+coord_polar("y",start=0)
+pie2
+
+#plot actual correct number
+true_num<-data.frame(
+  group=c("1.7.1_true","1.7.2_true","1.7.3_true","1.7.4_true","1.7.5_true","1.7.6_true"),
+  value=c(3143,3138,3082,3179,3192,3159)
+)
+bp3<-ggplot(true_num,aes(x=group,y=value,fill=group))+geom_bar(stat="identity")+geom_text(aes(label=value,vjust=-0.8,hjust=0.5),show.legend = TRUE)
+bp3
+```
+Therefore, in order to see the total error rate, repeated error rate of each question more intuitively, draw a table, a pie chart, and a histogram. It can be seen that 1.7.5 and 1.7.2 have the lowest repeat error rate, and the number of correct answers is also High, and 1.7.3 is the question with the highest repeat error rate, indicating that it is necessary to focus on the question.
+
+
+### Video stats
+
+In order to be able to visually see the positive status of students learning, the video status data set is merged. First, the data is sorted, and all columns with 0 are deleted to obtain a data set with 65 rows and 23 columns. Use ggplot to make a density map from the video. It can be seen from the density graph of the total playback volume that the video playback volume of each section has the highest density at 500, indicating that the average number of views is about 500. From the density graph of the number of video downloads, it can be seen that the number of video downloads in each section is About 50 times. 
+
+```{r,echo=FALSE}
+#Delete 0 columns
+video_stats=video_stats[,-16]
+video_stats=video_stats[,-18]
+video_stats=video_stats[,-19]
+video_stats=video_stats[,-25]
+video_stats=video_stats[,-2]
+video_stats1=as.data.frame(video_stats)
+#visualized total view
+p1<-ggplot(video_stats1,aes(total_views))
+bp5<-p1+geom_density(color="red",fill="yellow")
+bp5
+#visualized total downloads
+p<-ggplot(video_stats1,aes(total_downloads))
+bp4<-p+geom_density(color="red",fill="gray")
+bp4
+```
+
+In order to further study the relationship between variables, take rows 1 to 13 that is the data in the first table, load the reshape2 program package to refit the data set, take 1 to 4 columns, and make a scatter plot, from the scatter plot It can be seen that there is a linear relationship between the total number of videos played and the number of downloads. From the scattered point distribution, it can be seen that the most viewed and downloaded chapters of the video are 1.1, followed by 1.5, and the third chapter is generally very small, indicating that students enthusiasm for learning will be reduced later.
+
+```{r,echo=FALSE}
+#Explore the relationship between total view and total download 
+video_stats_1=video_stats1[1:13,]
+library(reshape2)
+dd=video_stats_1[,1:4]
+p2<-ggplot(dd,aes(x=total_views,y=total_downloads,group=factor(1)))+geom_point(stat="identity",color=dd$step_position)+geom_text(aes(label=step_position,vjust=-0.8,hjust=0.5),show.legend = TRUE)
+p2
+```
+
+Making an area chart for whether learner can understand the video content without adding subtitles. It can be seen from the figure that section 1.1 and section 1.5 have the most views, indicating that these two video contents are very Easy to understand. As for the requirements for high-definition video, it can be seen in the area chart that section 2.11 uses high-definition viewing the most, indicating that the 2.11 video definition needs to be improved.
+
+```{r,echo=FALSE}
+#Research on the way of playing video
+ggplot(video_stats_1,aes(x=step_position,y=total_caption_views))+geom_area(fill="blue",alpha=2)
+ggplot(video_stats_1,aes(x=step_position,y=viewed_hd))+geom_area(fill="red",alpha=2)
+```
+
+People who watch the video are in Europe, with a median of about 65.5%, indicating that the average view of people in Europe is 65.5%. The proportion of viewing in Asia and Oceania has decreased significantly, with the medians being 9.75% and 3.25% respectively.
+
+```{r,echo=FALSE}
+#Make box plots of the number of viewers in different regions
+ggplot(video_stats_1,aes(x=step_position,y=europe_views_percentage,group=factor(1)))+geom_boxplot()
+ggplot(video_stats_1,aes(x=step_position,y=asia_views_percentage,group=factor(1)))+geom_boxplot()
+ggplot(video_stats_1,aes(x=step_position,y=oceania_views_percentage,group=factor(1)))+geom_boxplot()
+```
+
+
+## Model establishment
+
+### video stats least squares regression model
+  
+To model the video stats, first do the principal component analysis on the data, delete the data in the second column and columns 15 to 23, select the data in rows 14 to 26 for principal component analysis, first calculate the correlation between the variables, It can be seen that there is a strong correlation between the first three variables. Use the var function to obtain the sample covariance matrix and extract the diagonal elements. The total coefficient of variation is calculated to be 181379.7. 
+
+```{r,echo=FALSE}
+#Principal component analysis
+library(MASS)
+video_stats2=video_stats1[,-(15:23)]
+video_stats2=video_stats2[,-2]
+video_stats2=video_stats2[c(14:26),]
+#Calculate correlation
+R=cor(video_stats2[,2:9])
+R
+#to obtain the sample covariance matrix use the var function
+S=var(video_stats2[,2:9])
+#extract the diagonal elements
+(s_sq=diag(S))
+```
+
+Use the prcomp() function to find the principal components and view the summary. The standard deviation of each principal component exceeds 100, and the cumulative variance contribution rate reaches 90%. It can be seen from the gravel graph that the variance of the first two principal components accounts for most of the total variance, so the first two principal components are selected. The ingredients are appropriate.
+
+```{r,echo=FALSE}
+total_variation=sum(s_sq)
+pca1=prcomp(x=video_stats2[,2:9])
+summary(pca1)
+par(mfrow=c(1,1))
+plot(pca1,type="lines",main="")
+title(xlab="Component number")
+```
+
+
+The next step is to  fit the least squares regression model. When doing correlation analysis, it is found that there is no correlation between the following variables and the total amount of video playback. Therefore, columns 3 to 6 of the data set are selected as independent variable, total viewed as the dependent variable, check the model summary and found that the first two variables are significant, that is, the total number of videos played has a significant relationship with the number of downloads and the number of views, draw the residual diagram, and the distribution of the residual diagram on the left It is rather scattered, and most of them are randomly distributed around 0. 
+
+```{r,echo=FALSE}
+#fit linear model
+x1_raw=video_stats2[,3:6]
+x1_raw=as.matrix(x1_raw)
+y=video_stats2[,2]
+#standardise explanatory variables
+x1=scale(x1_raw)
+#create single data frame containing response and explanatory variables
+video_data=data.frame(y,x1)
+lsq_fit=lm(y~.,data=video_data)
+summary(lsq_fit)
+par(mfrow=c(1,2))
+plot(lsq_fit,which=1:2)
+```
+
+Therefore, it can be considered that the total views volume of the video has a linear relationship with the number of downloads and the viewing time. The right panel is a quantile graph to evaluate the residuals. The normality of, most of the points are close to the unit diagonal, indicating that the residual of the linear regression model is normal.
+
+### Question response logistic model
+
+Perform model fitting on the question response data set. Since the data set type of the correct column is character, it needs to be converted to an integer type, and replace false with the number 2 and true with the number 1. Delete the data in the eighth column to Take the number of people who answered question 1.8.1 as an example, set a random seed, divide the data set into training set and test set according to 8:2, and delete the comma in the response column, use 1 for false, 0 for true, and correct as the response Variables and response columns are used as predictors to test the correlation between variables, fit a logistic model, and make predictions. The final test error is 0, indicating that the model has a better predictive effect.It can be seen from the figure that when the student’s answer is 123, it can be counted as correct, and all other answers are counted as wrong.
+
+```{r,echo=FALSE}
+#Delete the 8th column because it is all empty
+question_response=question_response[,-8]
+#Delete the value of na in the table
+question_response=na.omit(question_response)
+(question_response$correct[which(question_response$correct=="false")] <- 2)
+(question_response$correct[which(question_response$correct=="true")] <- 1)
+f<-factor(question_response$correct)
+dd<-as.integer(f)
+correct<-as.data.frame(dd)
+question_response1=question_response[,-8]
+question_response1=data.frame(question_response1,correct)
+question_response2=question_response1[,-8]
+#Extract the number of people who answered 1.8.1
+quiz_question_1.8.1=question_response2 %>% filter(quiz_question == "1.8.1")
+quiz_question_1.8.1=as.data.frame(quiz_question_1.8.1)
+set.seed(1234)
+sub=sample(1:nrow(quiz_question_1.8.1),round(nrow(quiz_question_1.8.1)*8/10))
+#8/10 of the data as the training set
+data_train=quiz_question_1.8.1[sub,]
+data_train_x=as.data.frame(data_train[,2:7])
+data_train_y=data_train[,8]
+quiz_train=data.frame(data_train_x,correct=data_train_y)
+quiz_train1=data.frame(quiz_train[,3:6],correct=as.integer(quiz_train$correct)-1)
+t=as.numeric(gsub(",",'',quiz_train1$response))
+t=as.data.frame(t)
+quiz_train1=quiz_train1[,-4]
+quiz_train1=data.frame(quiz_train1,t)
+#2/10 of the data as the test set
+data_test=quiz_question_1.8.1[-sub,]
+data_test_x=as.data.frame(data_test[,2:7])
+data_test_y=data_test[,8]
+quiz_test=data.frame(data_test_x,correct=data_test_y)
+quiz_test1=data.frame(quiz_test[,3:6],correct=as.integer(quiz_test$correct)-1)
+t1=as.numeric(gsub(",",'',quiz_test1$response))
+t1=as.data.frame(t1)
+quiz_test1=quiz_test1[,-4]
+quiz_test1=data.frame(quiz_test1,t1)
+table(quiz_test1$correct)
+#fit logistic model
+lr_fit=glm(correct~t,data=quiz_train1)
+summary(lr_fit)
+#Test the correlation between variables
+library(psych)
+library(car)
+corr.test(quiz_train1[,4:5])
+#Make predictions
+phat=predict(lr_fit,quiz_train1,type="response")
+yhat=ifelse(phat>0.5,1,0)
+(confusion=table(Observed=quiz_train1$correct,predict=yhat))
+#training error
+1-mean(quiz_train1$correct==yhat)
+#use test data
+lr_test=glm(correct~t1,data=quiz_test1)
+phat_test=predict(lr_test,quiz_test1,type="response")
+yhat_test=ifelse(phat_test>0.5,1,0)
+#testing error
+1-mean(quiz_test1$correct==yhat_test)
+
+#plot distribution of responses
+par(mfrow=c(1,1))
+hist(quiz_train1$t[quiz_train1$correct==1],col=rgb(0,0,1,1/4),breaks=25,freq=FALSE,xlim=c(0,130),ylim=c(0,0.2),main="",xlab="quiz_train")
+hist(quiz_train1$t[quiz_train1$correct==0],col=rgb(1,0,0,1/4),freq=FALSE,add=TRUE)
+legend("topright",legend =c("false","true"),bg="gray90",fill=c(rgb(0,0,1,1/4),rgb(1,0,0,1/4)))
+```
+
+
+
